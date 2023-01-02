@@ -1,26 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { IMail } from './../interface/mail.interface';
+// import { defaultApp } from '../auth/firebaseAdmin';
+import { Model } from 'mongoose';
 import { CreateMailDto } from './dto/create-mail.dto';
-import { UpdateMailDto } from './dto/update-mail.dto';
 
 @Injectable()
 export class MailService {
-  create(createMailDto: CreateMailDto) {
-    return 'This action adds a new mail';
+  constructor(@InjectModel('Mail') private mailModel: Model<IMail>) {}
+
+  async getAllMail(): Promise<IMail[]> {
+    const mailData = await this.mailModel.find();
+    return mailData || [];
   }
 
-  findAll() {
-    return `This action returns all mail`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} mail`;
-  }
-
-  update(id: number, updateMailDto: UpdateMailDto) {
-    return `This action updates a #${id} mail`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} mail`;
+  async saveMail(createdMailDto: CreateMailDto): Promise<IMail> {
+    const createdMail = await new this.mailModel(createdMailDto);
+    return createdMail.save();
   }
 }
