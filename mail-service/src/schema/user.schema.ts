@@ -5,10 +5,10 @@ export class User {
   @Prop()
   name: string;
 
-  @Prop()
+  @Prop({ unique: true })
   mail: string;
 
-  @Prop()
+  @Prop({ nullable: true })
   password: string;
 }
 

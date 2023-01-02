@@ -6,6 +6,9 @@ import { UsersController } from './users/users.controller';
 import { UserSchema } from './schema/user.schema';
 import { UsersService } from './users/users.service';
 import { ConfigModule } from '@nestjs/config';
+import { AuthenticationController } from './users/authentication/authentication.controller';
+import { AuthenticationService } from './users/authentication/authentication.service';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -17,8 +20,9 @@ import { ConfigModule } from '@nestjs/config';
       { dbName: 'cluster0' },
     ),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MailModule,
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  controllers: [AppController, UsersController, AuthenticationController],
+  providers: [AppService, UsersService, AuthenticationService],
 })
 export class AppModule {}

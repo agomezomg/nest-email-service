@@ -1,18 +1,37 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { NestGateway } from '@nestjs/websockets/interfaces/nest-gateway.interface';
+import { MailService } from './mail.service';
+import { Bind, Body } from '@nestjs/common';
+import { IMail } from './../interface/mail.interface';
+import { CreateMailDto } from './dto/create-mail.dto';
 
-@WebSocketGateway()
-export class MailGateway {
-  @WebSocketServer()
-  server: Server;
+@WebSocketGateway(3001)
+export class MailGateway implements NestGateway {
+  constructor(private mailService: MailService) {}
 
-  @SubscribeMessage('send_message')
-  listenForMessages(@MessageBody() data: string) {
-    this.server.sockets.emit('receive_message', data);
+  afterInit?: (server: any) => void;
+
+  handleConnection(socket: any) {
+    // const query = socket.handshake.query;
+    process.nextTick(async () => {
+      socket.emit('allMails', await this.mailService.getAllMail());
+    });
+  }
+
+  handleDisconnect(socket: any) {
+    console.log('Disconnect', socket);
+  }
+
+  @Bind(MessageBody(), ConnectedSocket())
+  @SubscribeMessage('mail')
+  async handleNewMessage(@Body() createMailDto: CreateMailDto, sender: any) {
+    const mail = await this.mailService.saveMail(createMailDto);
+    sender.emit('newMail', mail);
+    sender.broadcast.emit('newMail', mail);
   }
 }
