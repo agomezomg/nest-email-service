@@ -7,7 +7,6 @@ import {
 import { NestGateway } from '@nestjs/websockets/interfaces/nest-gateway.interface';
 import { MailService } from './mail.service';
 import { Bind, Body } from '@nestjs/common';
-import { IMail } from './../interface/mail.interface';
 import { CreateMailDto } from './dto/create-mail.dto';
 
 @WebSocketGateway(3001)
