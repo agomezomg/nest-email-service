@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
 
 @Schema()
 export class Mail {
@@ -21,4 +22,5 @@ export class Mail {
   body: string;
 }
 
-export const MailSchema = SchemaFactory.createForClass(Mail);
+export const MailSchema =
+  SchemaFactory.createForClass(Mail).plugin(softDeletePlugin);
