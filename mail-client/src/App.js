@@ -5,26 +5,24 @@ import MailWidget from "./components/MailWidget";
 import "./App.css";
 
 function App() {
-  const [username, setUsername] = useState("anagmar98@gmail.com")
-  const [room, setRoom] = useState("");
-  const [showChat, setShowChat] = useState(false);
+  const [username, setUsername] = useState("anagmar98@gmail.com");
   const [socket, setSocket] = useState(false);
 
   const login = () => {
     if (username !== "") {
       setUsername(username);
-      setShowChat(true);
     }
   };
 
   useEffect(() => {
     if (!socket)
       setSocket(io.connect("http://localhost:3001/chat"));
-  }, [socket])
+  }, []);
 
   return (
     <MailWidget socket={socket} username={username}/>
   );
 }
+
 
 export default App;
