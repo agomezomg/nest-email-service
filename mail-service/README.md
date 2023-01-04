@@ -1,4 +1,5 @@
-##Observations
+## Observations
+
 1. Mongo credentials were left hard-coded but have limited permissions to a single resource that was intended for this project.
 2. Authentication/JWT/Passports are implemented but not fully functional. Any email service should ideally have authentication logic, but given a time constraint, I decided to prioritise work with websockets.
 3. Users service was made to support authentication logic and is fully functional.
